@@ -1,18 +1,12 @@
-#pragma once
+#include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
 #include "TestUtil.h"
 #include <ErlangTokens.h>
-#include <string>
-#include <utility>
 
 BOOST_AUTO_TEST_SUITE( CharacterLiteralTests )
 
 using namespace TestUtil;
-using std::wstring;
-using std::pair;
-using std::make_pair;
-using std::transform;
-using std::for_each;
+using namespace std;
 
 BOOST_AUTO_TEST_CASE( CharacterLiteralsTest )
 {
@@ -21,19 +15,19 @@ BOOST_AUTO_TEST_CASE( CharacterLiteralsTest )
 
     vector<pair<unsigned int, const wchar_t*>> pairs;
     transform(charLiterals.begin(), charLiterals.end(), back_inserter(pairs),
-              [](const wstring& refString) { return make_pair(CHARACTERLITERAL, refString.c_str()); });
+              [](const wstring& refString) { return make_pair(ERLANGTOKEN_CHARACTERLITERAL, refString.c_str()); });
 
     VerifyPairs(pairs.begin(), pairs.end());
 }
 
 BOOST_AUTO_TEST_CASE( EscapedControlCodesCharacterLiteralsTest )
 {
-    VerifyEscapedControlCodes(CHARACTERLITERAL, wstring(L"$"), wstring(L""));
+    VerifyEscapedControlCodes(ERLANGTOKEN_CHARACTERLITERAL, wstring(L"$"), wstring(L""));
 }
 
 BOOST_AUTO_TEST_CASE( EscapedOctalCharacterLiteralsTest )
 {
-    VerifyEscapedOctalDigits(CHARACTERLITERAL, wstring(L"$"), wstring(L""));
+    VerifyEscapedOctalDigits(ERLANGTOKEN_CHARACTERLITERAL, wstring(L"$"), wstring(L""));
 }
 
 BOOST_AUTO_TEST_CASE( InvalidCharacterLiteralTests )

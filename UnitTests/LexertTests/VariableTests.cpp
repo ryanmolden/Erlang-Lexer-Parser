@@ -1,19 +1,12 @@
-#pragma once
+#include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
 #include "TestUtil.h"
 #include <ErlangTokens.h>
-#include <string>
-#include <utility>
-#include <iterator>
 
 BOOST_AUTO_TEST_SUITE( VariableTests )
 
 using namespace TestUtil;
-using std::wstring;
-using std::pair;
-using std::make_pair;
-using std::transform;
-using std::back_inserter;
+using namespace std;
 
 BOOST_AUTO_TEST_CASE( LeadingUnderscoreVariablesTest )
 {
@@ -33,7 +26,7 @@ BOOST_AUTO_TEST_CASE( LeadingUnderscoreVariablesTest )
 
     vector<pair<unsigned int, const wchar_t *>> pairs;
     transform(variables.begin(), variables.end(), back_inserter(pairs),
-              [](const wstring& refItem) { return make_pair(VARIABLE, refItem.c_str()); });
+              [](const wstring& refItem) { return make_pair(ERLANGTOKEN_VARIABLE, refItem.c_str()); });
 
     VerifyPairs(pairs.begin(), pairs.end());
 }
@@ -51,7 +44,7 @@ BOOST_AUTO_TEST_CASE( LeadingUppercaseSingleCharacterVariablesTest )
 
     vector<pair<unsigned int, const wchar_t*>> pairs;
     transform(variables.begin(), variables.end(), back_inserter(pairs),
-              [](const wstring& refItem) { return make_pair(VARIABLE, refItem.c_str()); });
+              [](const wstring& refItem) { return make_pair(ERLANGTOKEN_VARIABLE, refItem.c_str()); });
 
     VerifyPairs(pairs.begin(), pairs.end());
 }
@@ -74,7 +67,7 @@ BOOST_AUTO_TEST_CASE( LeadingUppercaseMultiCharacterVariablesTest )
 
     vector<pair<unsigned int, const wchar_t *>> pairs;
     transform(variables.begin(), variables.end(), back_inserter(pairs),
-              [](const wstring& refItem) { return make_pair(VARIABLE, refItem.c_str()); });
+              [](const wstring& refItem) { return make_pair(ERLANGTOKEN_VARIABLE, refItem.c_str()); });
 
     VerifyPairs(pairs.begin(), pairs.end());
 }

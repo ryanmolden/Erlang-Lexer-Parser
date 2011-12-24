@@ -26,6 +26,7 @@
 //%%
 //%% %CopyrightEnd%
 //%%
+//
 //%% Definition of the Erlang grammar.
 //
 //Nonterminals
@@ -33,17 +34,17 @@
 //attribute attr_val
 //function function_clauses function_clause
 //clause_args clause_guard clause_body
-//expr expr_100 expr_150 expr_160 expr_200 expr_300 expr_400 expr_500expr_600 expr_700 expr_800 expr_900
+//expr expr_100 expr_150 expr_160 expr_200 expr_300 expr_400 expr_500
+//expr_600 expr_700 expr_800 expr_900
 //expr_max
 //list tail
 //list_comprehension lc_expr lc_exprs
 //binary_comprehension
 //tuple
-//
 //%struct
 //record_expr record_tuple record_field record_fields
 //if_expr if_clause if_clauses case_expr cr_clause cr_clauses receive_expr
-//fun_expr fun_clause fun_clauses atom_or_var integer_or_var
+//fun_expr fun_clause fun_clauses
 //try_expr try_catch try_clause try_clauses query_expr
 //function_call argument_list
 //exprs guard
@@ -70,7 +71,7 @@
 //'==' '/=' '=<' '<' '>=' '>' '=:=' '=/=' '<='
 //'<<' '>>'
 //'!' '=' '::' '..' '...'
-//'spec' 'callback' % helper
+//'spec' % helper
 //dot.
 //
 //Expect 2.
@@ -82,24 +83,23 @@
 //form -> rule dot
 //
 //attribute -> '-' atom attr_val
-//attribute -> '-' atom typed_attr_val        
+//attribute -> '-' atom typed_attr_val
 //attribute -> '-' atom '(' typed_attr_val ')'
-//attribute -> '-' 'spec' type_spec           
-//attribute -> '-' 'callback' type_spec       
+//attribute -> '-' 'spec' type_spec
 //
 //type_spec -> spec_fun type_sigs
 //type_spec -> '(' spec_fun type_sigs ')'
 //
-//spec_fun ->                           atom
-//spec_fun ->                  atom ':' atom
+//spec_fun -> atom
+//spec_fun -> atom ':' atom
 //
 //%% The following two are retained only for backwards compatibility;
 //%% they are not part of the EEP syntax and should be removed.
-//spec_fun ->          atom '/' integer '::'
+//spec_fun -> atom '/' integer '::'
 //spec_fun -> atom ':' atom '/' integer '::'
 //
 //typed_attr_val -> expr ',' typed_record_fields
-//typed_attr_val -> expr '::' top_type
+//typed_attr_val -> expr '::' top_type          
 //
 //typed_record_fields -> '{' typed_exprs '}'
 //
@@ -115,12 +115,12 @@
 //
 //type_sig -> fun_type                      
 //type_sig -> fun_type 'when' type_guards   
+//                                          
 //
 //type_guards -> type_guard                 
 //type_guards -> type_guard ',' type_guards 
 //
 //type_guard -> atom '(' top_types ')'      
-//
 //type_guard -> var '::' top_type           
 //
 //top_types -> top_type                     
@@ -133,15 +133,12 @@
 //top_type_100 -> type_200 '|' top_type_100 
 //
 //type_200 -> type_300 '..' type_300        
-//
 //type_200 -> type_300                      
 //
 //type_300 -> type_300 add_op type_400      
-//
 //type_300 -> type_400                      
 //
 //type_400 -> type_400 mult_op type_500     
-//
 //type_400 -> type_500                      
 //
 //type_500 -> prefix_op type                
@@ -154,51 +151,51 @@
 //type -> atom '(' top_types ')'            
 //type -> atom ':' atom '(' ')'             
 //type -> atom ':' atom '(' top_types ')'   
-//
 //type -> '[' ']'                           
 //type -> '[' top_type ']'                  
 //type -> '[' top_type ',' '...' ']'        
-//
 //type -> '{' '}'                           
 //type -> '{' top_types '}'                 
-//
 //type -> '#' atom '{' '}'                  
 //type -> '#' atom '{' field_types '}'      
-//
 //type -> binary_type                       
 //type -> integer                           
 //type -> 'fun' '(' ')'                     
 //type -> 'fun' '(' fun_type_100 ')'        
 //
-//fun_type_100 -> '(' '...' ')' '->' top_type
-//fun_type_100 -> fun_type
+//fun_type_100 -> '(' '...' ')' '->' top_type                                          
+//fun_type_100 -> fun_type                  
+//
 //fun_type -> '(' ')' '->' top_type
 //fun_type -> '(' top_types ')' '->' top_type
-//
+//                                   
 //field_types -> field_type                 
 //field_types -> field_type ',' field_types 
-//field_type -> atom '::' top_type          
 //
-//binary_type -> '<<' '>>'                  
+//field_type -> atom '::' top_type          
+//                                          
+//binary_type -> '<<' '>>'                  					    					     
 //binary_type -> '<<' bin_base_type '>>'    
-//binary_type -> '<<' bin_unit_type '>>'    
+//binary_type -> '<<' bin_unit_type '>>'
 //binary_type -> '<<' bin_base_type ',' bin_unit_type '>>'
 //
 //bin_base_type -> var ':' type
 //
 //bin_unit_type -> var ':' var '*' type
 //
-//attr_val -> expr                  
-//attr_val -> expr ',' exprs        
+//attr_val -> expr
+//attr_val -> expr ',' exprs
 //attr_val -> '(' expr ',' exprs ')'
 //
 //function -> function_clauses
 //
 //function_clauses -> function_clause
 //function_clauses -> function_clause ';' function_clauses
+//
 //function_clause -> atom clause_args clause_guard clause_body
 //
 //clause_args -> argument_list
+//
 //clause_guard -> 'when' guard
 //clause_guard -> '$empty'
 //
@@ -206,33 +203,48 @@
 //
 //expr -> 'catch' expr
 //expr -> expr_100
+//
 //expr_100 -> expr_150 '=' expr_100
 //expr_100 -> expr_150 '!' expr_100
 //expr_100 -> expr_150
+//
 //expr_150 -> expr_160 'orelse' expr_150
 //expr_150 -> expr_160
+//
 //expr_160 -> expr_200 'andalso' expr_160
 //expr_160 -> expr_200
+//
 //expr_200 -> expr_300 comp_op expr_300
 //expr_200 -> expr_300
+//
 //expr_300 -> expr_400 list_op expr_300
 //expr_300 -> expr_400
+//
 //expr_400 -> expr_400 add_op expr_500
 //expr_400 -> expr_500
+//
 //expr_500 -> expr_500 mult_op expr_600
 //expr_500 -> expr_600
+//
 //expr_600 -> prefix_op expr_700
 //expr_600 -> expr_700
+//
 //expr_700 -> function_call
 //expr_700 -> record_expr
 //expr_700 -> expr_800
+//
+//expr_800 -> expr_900 ':' expr_max
 //expr_800 -> expr_900
-//expr_800 -> expr_900
+//
 //expr_900 -> '.' atom
 //expr_900 -> expr_900 '.' atom
+//expr_900 -> expr_max
 //
+//expr_max -> var
 //expr_max -> atomic
+//expr_max -> list
 //expr_max -> binary
+//expr_max -> list_comprehension
 //expr_max -> binary_comprehension
 //expr_max -> tuple
 //%%expr_max -> struct
@@ -278,7 +290,6 @@
 //bit_size_expr -> expr_max
 //
 //list_comprehension -> '[' expr '||' lc_exprs ']'
-//
 //binary_comprehension -> '<<' binary '||' lc_exprs '>>'
 //
 //lc_exprs -> lc_expr
@@ -291,13 +302,11 @@
 //tuple -> '{' '}'
 //tuple -> '{' exprs '}'
 //
-//%%struct -> atom tuple :
-//%%	{struct,?line('$1'),element(3, '$1'),element(3, '$2')}.
+//%%struct -> atom tuple
 //
 //%% N.B. This is called from expr_700.
 //%% N.B. Field names are returned as the complete object, even if they are
 //%% always atoms for the moment, this might change in the future.
-//
 //record_expr -> '#' atom '.' atom
 //record_expr -> '#' atom record_tuple
 //record_expr -> expr_max '#' atom '.' atom
@@ -310,6 +319,7 @@
 //
 //record_fields -> record_field
 //record_fields -> record_field ',' record_fields
+//
 //record_field -> var '=' expr
 //record_field -> atom '=' expr
 //
@@ -320,6 +330,7 @@
 //
 //if_clauses -> if_clause
 //if_clauses -> if_clause ';' if_clauses
+//
 //if_clause -> guard clause_body
 //
 //case_expr -> 'case' expr 'of' cr_clauses 'end'
@@ -334,14 +345,8 @@
 //receive_expr -> 'receive' cr_clauses 'after' expr clause_body 'end'
 //
 //fun_expr -> 'fun' atom '/' integer
-//fun_expr -> 'fun' atom_or_var ':' atom_or_var '/' integer_or_var
+//fun_expr -> 'fun' atom ':' atom '/' integer
 //fun_expr -> 'fun' fun_clauses 'end'
-//
-//atom_or_var -> atom
-//atom_or_var -> var
-//
-//integer_or_var -> integer
-//integer_or_var -> var
 //
 //fun_clauses -> fun_clause
 //fun_clauses -> fun_clause ';' fun_clauses
@@ -396,10 +401,10 @@
 //
 //add_op -> '+'
 //add_op -> '-'
-//add_op -> 'bor'
+//add_op -> 'bor' 
 //add_op -> 'bxor'
-//add_op -> 'bsl'
-//add_op -> 'bsr'
+//add_op -> 'bsl' 
+//add_op -> 'bsr' 
 //add_op -> 'or'
 //add_op -> 'xor'
 //
@@ -409,9 +414,9 @@
 //comp_op -> '=='
 //comp_op -> '/='
 //comp_op -> '=<'
-//comp_op -> '<'
+//comp_op -> '<' 
 //comp_op -> '>='
-//comp_op -> '>'
+//comp_op -> '>' 
 //comp_op -> '=:='
 //comp_op -> '=/='
 //
@@ -438,105 +443,111 @@ struct ErlangLexer : lex::lexer<Lexer>
 {
     //TODO:  Make the underlying char type a template param, problem is MSVC wants L'' for wide chars and '' for non-wide,
     //so it can be a little tricky to have the right literals here if the user can swtich the underlying stream type.
-    //Likely need a char_traits type approach that would expose a suffix (possibly the empty string) to be added to my
+    //Likely need a char_traits type approach that would expose a prefix (possibly the empty string) to be added to my
     //literals.
-    typedef lex::token_def<lex::unused_type, wchar_t> Token;
+    typedef lex::token_def<std::wstring, wchar_t> Token;
 
     ErlangLexer(LexerBehavior lexerBehavior = LB_Standard)
     {
         // define tokens (the regular expression to match and the corresponding token id) and add them to the lexer 
 
         /*Seperators*/
-        leftParen            = Token(L'(', LEFTPAREN);
-        rightParen           = Token(L')', RIGHTPAREN);
-        comma                = Token(L',', COMMA);
-        arrow                = Token(L"->", ARROW);
-        ruleThingy           = Token(L":-", RULETHINGY);
-        leftCurlyBracket     = Token(L'{', LEFTCURLYBRACKET);
-        rightCurlyBracket    = Token(L'}', RIGHTCURLYBRACKET);
-        leftBracket          = Token(L'[', LEFTBRACKET);
-        rightBracket         = Token(L']', RIGHTBRACKET);
-        bitstringHead        = Token(L"<<", BITSTRINGHEAD);
-        bitstringTail        = Token(L">>", BITSTRINGTAIL);
-        bar                  = Token(L'|', BAR);
-        doubleBar            = Token(L"\\|\\|", DOUBLEBAR);
-        semiColon            = Token(L';', SEMICOLON);
-        colon                = Token(L':', COLON);
-        forwardSlash         = Token(L'/', FORWARDSLASH);
-        hash                 = Token(L'#', HASH);
-        typeSeparator        = Token(L"::", TYPESEPARATOR);
-        typeValueRange       = Token(L"\\.\\.", TYPEVALUERANGE);
-        unspecifiedType      = Token(L"\\.\\.\\.", UNSPECIFIEDTYPE);
-        terminator           = Token(L'.', TERMINATOR);
+        leftParen            = Token(L'(', ERLANGTOKEN_LEFTPAREN);
+        rightParen           = Token(L')', ERLANGTOKEN_RIGHTPAREN);
+        comma                = Token(L',', ERLANGTOKEN_COMMA);
+        arrow                = Token(L"->", ERLANGTOKEN_ARROW);
+        ruleSeparator        = Token(L":-", ERLANGTOKEN_RULESEPARATOR);
+        leftCurlyBracket     = Token(L'{', ERLANGTOKEN_LEFTCURLYBRACKET);
+        rightCurlyBracket    = Token(L'}', ERLANGTOKEN_RIGHTCURLYBRACKET);
+        leftBracket          = Token(L'[', ERLANGTOKEN_LEFTBRACKET);
+        rightBracket         = Token(L']', ERLANGTOKEN_RIGHTBRACKET);
+        bitstringHead        = Token(L"<<", ERLANGTOKEN_BITSTRINGHEAD);
+        bitstringTail        = Token(L">>", ERLANGTOKEN_BITSTRINGTAIL);
+        bar                  = Token(L'|', ERLANGTOKEN_BAR);
+        doubleBar            = Token(L"\\|\\|", ERLANGTOKEN_DOUBLEBAR);
+        semiColon            = Token(L';', ERLANGTOKEN_SEMICOLON);
+        colon                = Token(L':', ERLANGTOKEN_COLON);
+        forwardSlash         = Token(L'/', ERLANGTOKEN_FORWARDSLASH);
+        hash                 = Token(L'#', ERLANGTOKEN_HASH);
+        typeSeparator        = Token(L"::", ERLANGTOKEN_TYPESEPARATOR);
+        typeValueRange       = Token(L"\\.\\.", ERLANGTOKEN_TYPEVALUERANGE);
+        unspecifiedType      = Token(L"\\.\\.\\.", ERLANGTOKEN_UNSPECIFIEDTYPE);
+
+        //The dot is somewhat of a special case in Erlang as there is ambiguity between a dot that ends a term (.[whitespace]) and
+        //a dot that is part of expr_900 (.<atom>).  Since the lexer normally eats whitespace we need to detect the two conditions 
+        //here and produce the proper token or our parser would have no way of parsing certain, otherwise valid, constructs.
+        //
+        //NOTE:  The lack of \\n in the character class is not an oversight.  lexertl seems to always treat \\n as a line\input terminator and
+        //thus it never matches \\.\\n and always, instead, matches \\.$ (i.e. it treats the newline as a 'special' character that doesn't
+        //participate in the match).
+        dotTerminator = Token(L"\\.[ \\t\\r]", ERLANGTOKEN_DOTTERMINATOR);
+        dotTerminatorAtEOI = Token(L"\\.$", ERLANGTOKEN_DOTTERMINATOR);
+        dot = Token(L'.', ERLANGTOKEN_DOT);
 
         /*Keywords*/
-        keywordAfter      = Token(L"after", AFTER);
-        keywordBegin      = Token(L"begin", BEGIN);
-        keywordCase       = Token(L"case", CASE);
-        keywordTry        = Token(L"try", TRY);
-        keywordCatch      = Token(L"catch", CATCH);
-        keywordEnd        = Token(L"end", END);
-        keywordFun        = Token(L"fun", FUN);
-        keywordIf         = Token(L"if", IF); 
-        keywordOf         = Token(L"of", OF);
-        keywordReceive    = Token(L"receive", RECEIVE); 
-        keywordWhen       = Token(L"when", WHEN);
-        keywordAndAlso    = Token(L"andalso", ANDALSO);
-        keywordOrElse     = Token(L"orelse", ORELSE);
-        keywordQuery      = Token(L"query", QUERY);
-
-        //TODO:  Are these keywords or simply specifically named/recognized attributes...I think the latter
-        keywordSpec       = Token(L"spec", SPEC);
-        keywordCallback   = Token(L"callback", CALLBACK);
+        keywordAfter      = Token(L"after", ERLANGTOKEN_AFTER);
+        keywordBegin      = Token(L"begin", ERLANGTOKEN_BEGIN);
+        keywordCase       = Token(L"case", ERLANGTOKEN_CASE);
+        keywordTry        = Token(L"try", ERLANGTOKEN_TRY);
+        keywordCatch      = Token(L"catch", ERLANGTOKEN_CATCH);
+        keywordEnd        = Token(L"end", ERLANGTOKEN_END);
+        keywordFun        = Token(L"fun", ERLANGTOKEN_FUN);
+        keywordIf         = Token(L"if", ERLANGTOKEN_IF); 
+        keywordOf         = Token(L"of", ERLANGTOKEN_OF);
+        keywordReceive    = Token(L"receive", ERLANGTOKEN_RECEIVE); 
+        keywordWhen       = Token(L"when", ERLANGTOKEN_WHEN);
+        keywordAndAlso    = Token(L"andalso", ERLANGTOKEN_ANDALSO);
+        keywordOrElse     = Token(L"orelse", ERLANGTOKEN_ORELSE);
+        keywordQuery      = Token(L"query", ERLANGTOKEN_QUERY);
 
         /*Operators*/
         //
         //NOTE - There is no floating point division operator (/) as it is ambiguous with the function name and arity seperator, since it is the
         //same symbol.  I chose to just call it ID_FORWARDSLASH and the parser can disambiguate whether it is an FP division or a name/arity 
         //separator as it will have more context.
-        operatorBNOT             = Token(L"bnot", OPBNOT);
-        operatorNOT              = Token(L"not", OPNOT);
-        operatorMultiply         = Token(L'*', OPMULT);
-        operatorIntDivide        = Token(L"div", OPINTDIV);
-        operatorRemainder        = Token(L"rem", OPREM);
-        operatorBAND             = Token(L"band", OPBAND);
-        operatorAND              = Token(L"and", OPAND);
-        operatorPlus             = Token(L'+', OPPLUS);
-        operatorMinus            = Token(L'-', OPMINUS);
-        operatorBOR              = Token(L"bor", OPBOR);
-        operatorBXOR             = Token(L"bxor", OPBXOR);
-        operatorBSL              = Token(L"bsl", OPBSL);
-        operatorBSR              = Token(L"bsr", OPBSR);
-        operatorOR               = Token(L"or", OPOR);
-        operatorXOR              = Token(L"xor", OPXOR);
-        operatorListConcat       = Token(L"\\+\\+", OPLISTCONCAT);
-        operatorListSubtract     = Token(L"--", OPLISTSUBTRACT);
-        operatorEqualTo          = Token(L"==", OPEQUALTO);
-        operatorNotEqualTo       = Token(L"\\/=", OPNOTEQUALTO);
-        operatorLessThanEqual    = Token(L"=<", OPLESSTHANEQUAL);
-        operatorLessThan         = Token(L'<', OPLESSTHAN);
-        operatorGreaterThanEqual = Token(L">=", OPGREATERTHANEQUAL);
-        operatorGreaterThan      = Token(L'>', OPGREATERTHAN);
-        operatorIdenticalTo      = Token(L"=:=", OPIDENTICALTO);
-        operatorNotIdenticalTo   = Token(L"=\\/=", OPNOTIDENTICALTO);
-        operatorGenerate         = Token(L"<-", OPGENERATE);
-        operatorBitGenerate      = Token(L"<=", OPBITGENERATE);
-        operatorSend             = Token(L'!', OPSEND);
-        operatorMatch            = Token(L'=', OPMATCH);
+        operatorBNOT             = Token(L"bnot", ERLANGTOKEN_OPBNOT);
+        operatorNOT              = Token(L"not", ERLANGTOKEN_OPNOT);
+        operatorMultiply         = Token(L'*', ERLANGTOKEN_OPMULT);
+        operatorIntDivide        = Token(L"div", ERLANGTOKEN_OPINTDIV);
+        operatorRemainder        = Token(L"rem", ERLANGTOKEN_OPREM);
+        operatorBAND             = Token(L"band", ERLANGTOKEN_OPBAND);
+        operatorAND              = Token(L"and", ERLANGTOKEN_OPAND);
+        operatorListConcat       = Token(L"\\+\\+", ERLANGTOKEN_OPLISTCONCAT);
+        operatorListSubtract     = Token(L"--", ERLANGTOKEN_OPLISTSUBTRACT);
+        operatorPlus             = Token(L'+', ERLANGTOKEN_OPPLUS);
+        operatorMinus            = Token(L'-', ERLANGTOKEN_OPMINUS);
+        operatorBOR              = Token(L"bor", ERLANGTOKEN_OPBOR);
+        operatorBXOR             = Token(L"bxor", ERLANGTOKEN_OPBXOR);
+        operatorBSL              = Token(L"bsl", ERLANGTOKEN_OPBSL);
+        operatorBSR              = Token(L"bsr", ERLANGTOKEN_OPBSR);
+        operatorOR               = Token(L"or", ERLANGTOKEN_OPOR);
+        operatorXOR              = Token(L"xor", ERLANGTOKEN_OPXOR);
+        operatorEqualTo          = Token(L"==", ERLANGTOKEN_OPEQUALTO);
+        operatorNotEqualTo       = Token(L"\\/=", ERLANGTOKEN_OPNOTEQUALTO);
+        operatorLessThanEqual    = Token(L"=<", ERLANGTOKEN_OPLESSTHANEQUAL);
+        operatorLessThan         = Token(L'<', ERLANGTOKEN_OPLESSTHAN);
+        operatorGreaterThanEqual = Token(L">=", ERLANGTOKEN_OPGREATERTHANEQUAL);
+        operatorGreaterThan      = Token(L'>', ERLANGTOKEN_OPGREATERTHAN);
+        operatorIdenticalTo      = Token(L"=:=", ERLANGTOKEN_OPIDENTICALTO);
+        operatorNotIdenticalTo   = Token(L"=\\/=", ERLANGTOKEN_OPNOTIDENTICALTO);
+        operatorGenerate         = Token(L"<-", ERLANGTOKEN_OPGENERATE);
+        operatorBitGenerate      = Token(L"<=", ERLANGTOKEN_OPBITGENERATE);
+        operatorSend             = Token(L'!', ERLANGTOKEN_OPSEND);
+        operatorMatch            = Token(L'=', ERLANGTOKEN_OPMATCH);
 
         std::wstring validEscapeSequence(L"\\\\^[\\x40-\\x5f]|\\\\[0-7][0-7]?[0-7]?|\\\\[btnvdefrs'\"\\\\]");
 
         /*Misc*/
-        universalPattern     = Token('_', UNIVERSALPATTERN);
-        atom          = Token(std::wstring(L"([a-z][\\w@]*)|'([^\\'\\x00-\\x1F]") + L"|" + validEscapeSequence + L")*'", ATOM);
-        comment       = Token(L"%[\t\\x20-\\x7E]*(\\n|\\r|\\r\\n|\\n\\r)?", COMMENT);
-        variable      = Token(L"[A-Z][\\w@]*|(_[\\w@]+)", VARIABLE);
+        universalPattern     = Token('_', ERLANGTOKEN_UNIVERSALPATTERN);
+        atom          = Token(std::wstring(L"([a-z][\\w@]*)|'([^\\'\\x00-\\x1F]") + L"|" + validEscapeSequence + L")+'", ERLANGTOKEN_ATOM);
+        comment       = Token(L"%[\t\\x20-\\x7E]*(\\n|\\r|\\r\\n|\\n\\r)?", ERLANGTOKEN_COMMENT);
+        variable      = Token(L"[A-Z][\\w@]*|(_[\\w@]+)", ERLANGTOKEN_VARIABLE);
 
         /*Literals*/
-        characterLiteral     = Token(std::wstring(L"$([\\x20-\\x7E]") + L"|" + validEscapeSequence + L")", CHARACTERLITERAL);
-        explicitRadixLiteral = Token(L"2#[01]+|16#[\\da-fA-F]+|3#[0-2]+|4#[0-3]+|5#[0-4]+|6#[0-5]+|7#[0-6]+|8#[0-7]+|9#[0-8]+|10#[\\d]+|11#[\\daA]+|12#[\\daAbB]+|13#[\\da-cA-C]+|14#[\\da-dA-D]+|15#[\\da-eA-E]+", EXPLICITRADIXLITERAL);
-        floatLiteral         = Token(L"[\\d]+\\.[\\d]+([eE][+-][\\d]+)?", FLOATLITERAL);
-        decimalLiteral       = Token(L"[\\d]+", DECIMALLITERAL);
+        characterLiteral     = Token(std::wstring(L"$([\\x20-\\x7E]") + L"|" + validEscapeSequence + L")", ERLANGTOKEN_CHARACTERLITERAL);
+        explicitRadixLiteral = Token(L"2#[01]+|16#[\\da-fA-F]+|3#[0-2]+|4#[0-3]+|5#[0-4]+|6#[0-5]+|7#[0-6]+|8#[0-7]+|9#[0-8]+|10#[\\d]+|11#[\\daA]+|12#[\\daAbB]+|13#[\\da-cA-C]+|14#[\\da-dA-D]+|15#[\\da-eA-E]+", ERLANGTOKEN_EXPLICITRADIXLITERAL);
+        floatLiteral         = Token(L"[\\d]+\\.[\\d]+([eE][+-][\\d]+)?", ERLANGTOKEN_FLOATLITERAL);
+        decimalLiteral       = Token(L"[\\d]+", ERLANGTOKEN_DECIMALLITERAL);
 
         //We have a flag that allows us to recognize an unterminated string literal as a string literal, this is useful for users who
         //want to use the lexer to classify text in an IDE. This allows something like "Foo to be recognized as a string literal while
@@ -550,42 +561,28 @@ struct ErlangLexer : lex::lexer<Lexer>
             stringLiteralRegEx += L"?";
         }
 
-        stringLiteral = Token(stringLiteralRegEx, STRINGLITERAL);
-
-        //TODO:  Should I recognize all of these attributes or just wildAttribute (which is basically '-<atom>').  The
-        //original grammar I was reading called these out as explicitly recognized atoms, but the one above from the
-        //YRL file seems to have reverted to just saying the pattern '-<atom>' is an attribute and not specifically
-        //calling out any (except for spec and callback).
+        stringLiteral = Token(stringLiteralRegEx, ERLANGTOKEN_STRINGLITERAL);
 
         /*Attributes*/
-        fileAttributeHead       = Token(L"-file", FILEATTRIBUTEHEAD);
-        moduleAttributeHead     = Token(L"-module", MODULEATTRIBUTEHEAD);
-        exportTypeAttributeHead = Token(L"-export_type", EXPORTTYPEATTRIBUTEHEAD);
-        exportAttributeHead     = Token(L"-export", EXPORTATTRIBUTEHEAD);
-        importAttributeHead     = Token(L"-import", IMPORTATTRIBUTEHEAD);
-        compileAttributeHead    = Token(L"-compile", COMPILEATTRIBUTEHEAD);
-        macroDefinitionHead     = Token(L"-define", MACRODEFINITIONHEAD);
-        typeDefinitionHead      = Token(L"-type", TYPEDEFINITIONHEAD);
-        functionSpecHead        = Token(L"-spec", FUNCTIONSPECHEAD);
-        recordAttributeHead     = Token(L"-record", RECORDATTRIBUTEHEAD);
-        wildAttributeHead       = Token(std::wstring(L"-(([a-z][\\w@]*)|'([^\\'\\x00-\\x1F]") + L"|" + validEscapeSequence + L")*')", WILDATTRIBUTEHEAD);
+        specAttributeHead     = Token(L"-spec", ERLANGTOKEN_SPECATTRIBUTEHEAD);
+        callbackAttributeHead = Token(L"-callback", ERLANGTOKEN_CALLBACKATTRIBUTEHEAD);
+        genericAttributeHead  = Token(std::wstring(L"-(([a-z][\\w@]*)|'([^\\'\\x00-\\x1F]") + L"|" + validEscapeSequence + L")*')", ERLANGTOKEN_GENERICATTRIBUTEHEAD);
 
         //Add our tokens
-        this->self = fileAttributeHead | moduleAttributeHead | exportTypeAttributeHead | exportAttributeHead | importAttributeHead | 
-                     compileAttributeHead | typeDefinitionHead | functionSpecHead | macroDefinitionHead | recordAttributeHead | wildAttributeHead |
+        this->self = specAttributeHead | callbackAttributeHead | genericAttributeHead |
 
                      characterLiteral | explicitRadixLiteral | floatLiteral | decimalLiteral | stringLiteral | 
                      
-                     leftParen | rightParen | comma | arrow | ruleThingy | leftCurlyBracket | rightCurlyBracket | leftBracket | rightBracket | 
+                     leftParen | rightParen | comma | arrow | ruleSeparator | leftCurlyBracket | rightCurlyBracket | leftBracket | rightBracket | 
                      bitstringHead | bitstringTail | bar | doubleBar | semiColon | colon | forwardSlash | hash | typeSeparator | typeValueRange | unspecifiedType |
-                     terminator | 
+                     dotTerminator | dotTerminatorAtEOI | dot | 
 
                      keywordAfter | keywordBegin  | keywordCase | keywordTry | keywordCatch | keywordEnd | keywordFun | keywordIf | keywordOf | 
-                     keywordReceive | keywordWhen | keywordAndAlso | keywordOrElse | keywordQuery | keywordSpec | keywordCallback |
+                     keywordReceive | keywordWhen | keywordAndAlso | keywordOrElse | keywordQuery |
 
                      operatorBNOT | operatorNOT | operatorMultiply | operatorIntDivide | operatorRemainder | operatorBAND | operatorAND | 
-                     operatorPlus | operatorMinus | operatorBOR | operatorBXOR | operatorBSL | operatorBSR | operatorOR | operatorXOR | 
-                     operatorListConcat | operatorListSubtract | operatorEqualTo | operatorNotEqualTo | operatorLessThanEqual |operatorLessThan | 
+                     operatorListConcat | operatorListSubtract | operatorPlus | operatorMinus | operatorBOR | operatorBXOR | operatorBSL | 
+                     operatorBSR | operatorOR | operatorXOR | operatorEqualTo | operatorNotEqualTo | operatorLessThanEqual |operatorLessThan | 
                      operatorGreaterThanEqual | operatorGreaterThan | operatorIdenticalTo | operatorNotIdenticalTo | operatorGenerate | operatorBitGenerate |
                      operatorSend | operatorMatch | 
                      
@@ -612,14 +609,16 @@ struct ErlangLexer : lex::lexer<Lexer>
     Token comma;
     Token questionMark;
     Token arrow;
-    Token ruleThingy;
+    Token ruleSeparator;
     Token doubleBar;
     Token bar;
     Token hash;    
     Token universalPattern;
     Token typeValueRange;
     Token unspecifiedType;
-    Token terminator;
+    Token dot;
+    Token dotTerminator;
+    Token dotTerminatorAtEOI;
     Token bitstringHead;
     Token bitstringTail;
 
@@ -637,9 +636,9 @@ struct ErlangLexer : lex::lexer<Lexer>
     Token keywordAndAlso;
     Token keywordOrElse;
     Token keywordQuery;
-    Token keywordSpec;
-    Token keywordCallback;
 
+    Token operatorListConcat;
+    Token operatorListSubtract;
     Token operatorPlus;
     Token operatorMinus;
     Token operatorMultiply;
@@ -663,8 +662,6 @@ struct ErlangLexer : lex::lexer<Lexer>
     Token operatorGreaterThanEqual;
     Token operatorNOT;
     Token operatorBNOT;
-    Token operatorListConcat;
-    Token operatorListSubtract;
     Token operatorMatch;
     Token operatorSend;
     Token operatorGenerate;
@@ -679,15 +676,7 @@ struct ErlangLexer : lex::lexer<Lexer>
     Token comment;
     Token variable;
 
-    Token fileAttributeHead;
-    Token moduleAttributeHead;
-    Token exportTypeAttributeHead;
-    Token exportAttributeHead;
-    Token importAttributeHead;
-    Token compileAttributeHead;
-    Token macroDefinitionHead;
-    Token typeDefinitionHead;
-    Token functionSpecHead;
-    Token recordAttributeHead;
-    Token wildAttributeHead;
+    Token specAttributeHead;
+    Token callbackAttributeHead;
+    Token genericAttributeHead;
 };

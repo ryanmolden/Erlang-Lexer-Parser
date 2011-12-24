@@ -1,8 +1,8 @@
 #pragma once
-
 #include <string>
 #include <vector>
 #include <utility>
 #include <functional>
-
-#include "ErlangLexer.h"
+#include <algorithm>
+#include <iterator>
+#include <iostream>

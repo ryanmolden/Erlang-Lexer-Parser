@@ -1,18 +1,12 @@
-#pragma once
+#include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
 #include "TestUtil.h"
 #include <ErlangTokens.h>
-#include <string>
-#include <utility>
 
 BOOST_AUTO_TEST_SUITE( ExplicitRadixLiteralTests )
 
 using namespace TestUtil;
-using std::string;
-using std::pair;
-using std::make_pair;
-using std::transform;
-using std::for_each;
+using namespace std;
 
 namespace
 {
@@ -37,14 +31,14 @@ namespace
 
                 buffer[radixLength+1] = upperCaseCharDigits[adjustedIndex];
                 buffer[radixLength+2] = L'\0';
-                expectedTokens.push_back(make_pair(EXPLICITRADIXLITERAL, wstring(buffer)));
+                expectedTokens.push_back(make_pair(ERLANGTOKEN_EXPLICITRADIXLITERAL, wstring(buffer)));
 
                 VerifyLex(wstring(buffer), expectedTokens);
 
                 expectedTokens.clear();
 
                 buffer[radixLength+1] = lowerCaseCharDigits[adjustedIndex];
-                expectedTokens.push_back(make_pair(EXPLICITRADIXLITERAL, wstring(buffer)));
+                expectedTokens.push_back(make_pair(ERLANGTOKEN_EXPLICITRADIXLITERAL, wstring(buffer)));
 
                 VerifyLex(wstring(buffer), expectedTokens);
             }
@@ -52,7 +46,7 @@ namespace
             {
                 buffer[radixLength+1] = digits[i];
                 buffer[radixLength+2] = L'\0';
-                expectedTokens.push_back(make_pair(EXPLICITRADIXLITERAL, wstring(buffer)));
+                expectedTokens.push_back(make_pair(ERLANGTOKEN_EXPLICITRADIXLITERAL, wstring(buffer)));
 
                 VerifyLex(wstring(buffer), expectedTokens);
             }

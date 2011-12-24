@@ -1,25 +1,27 @@
-#include "StdAfx.h"
+#include "stdafx.h"
+#include "ErlangLexer.h"
 #include <boost/test/unit_test.hpp>
 #include "TestUtil.h"
 #include <fstream>
 #include <regex>
+#include <ErlangLexer.h>
+#include <sstream>
+#include <boost/test/unit_test_log.hpp>
 
 namespace
 {
-    //TODO:  Pass this into test cases instead of having this global, but this speeds up runtime MASSIVELY over constantly reconstructing it.
-    ErlangLexer<lex::lexertl::actor_lexer<lex::lexertl::token<const wchar_t*>>> g_lexer;
-}
+    typedef lex::lexertl::token<const wchar_t*> TokenType;
+    typedef lex::lexertl::actor_lexer<TokenType> BaseLexerType;
 
-using std::pair;
-using std::string;
-using std::function;
-using std::for_each;
-using std::wregex;
-using std::regex_replace;
+    //TODO:  Pass this into test cases instead of having this global, but this speeds up runtime MASSIVELY over constantly reconstructing it.
+    ErlangLexer<BaseLexerType> g_lexer;
+}
 
 namespace TestUtil
 {
-    void PopulateASCIICharacterCodes(vector<wstring>& toPopulate, const pair<int,int>& characterCodeRange, wstring prefix/* = string()*/) 
+    using namespace std;
+
+    void PopulateASCIICharacterCodes(vector<wstring>& toPopulate, const pair<int,int>& characterCodeRange, wstring prefix /* = string()*/) 
     {
         for(int i = characterCodeRange.first ; i < characterCodeRange.second ; ++i)
         {
@@ -35,11 +37,13 @@ namespace TestUtil
         wchar_t const* first = refToLex.c_str();
         wchar_t const* last = first + refToLex.size();
 
-        TokenVector actualTokens;
-        TokenProcessor tokenProcessor(actualTokens);
-        bool res = lex::tokenize(first, last, g_lexer, tokenProcessor);
+        auto cur = g_lexer.begin(first, last);
+        auto end = g_lexer.end();
 
-        for_each(actualTokens.begin(), actualTokens.end(), callback);
+        for( ; cur != end && cur->is_valid() ; ++cur)
+        {
+            callback(make_pair(cur->id(), wstring(cur->value().begin(), cur->value().end())));
+        }
     }
 
     wstring EscapeQuotes(const wstring& refToEscape)
@@ -55,28 +59,31 @@ namespace TestUtil
 
     wstring MapIntToEnumName(unsigned int tokenId)
     {
-        const wchar_t *enumNameArr[] = { L"LEFTPAREN", L"RIGHTPAREN", L"COMMA", L"ARROW", L"RULETHINGY", 
-                                         L"LEFTCURLYBRACKET", L"RIGHTCURLYBRACKET", L"LEFTBRACKET", L"RIGHTBRACKET",
-                                         L"BITSTRINGHEAD", L"BITSTRINGTAIL", L"BAR", L"DOUBLEBAR", L"SEMICOLON", L"COLON", 
-                                         L"FORWARDSLASH", L"HASH", L"TYPESEPARATOR", L"TYPEVALUERANGE", L"UNSPECIFIEDTYPE", L"TERMINATOR",
+        const wchar_t *enumNameArr[] = { L"ERLANGTOKEN_LEFTPAREN", L"ERLANGTOKEN_RIGHTPAREN", L"ERLANGTOKEN_COMMA", L"ERLANGTOKEN_ARROW", L"ERLANGTOKEN_RULESEPARATOR", 
+                                         L"ERLANGTOKEN_LEFTCURLYBRACKET", L"ERLANGTOKEN_RIGHTCURLYBRACKET", L"ERLANGTOKEN_LEFTBRACKET", L"ERLANGTOKEN_RIGHTBRACKET",
+                                         L"ERLANGTOKEN_BITSTRINGHEAD", L"ERLANGTOKEN_BITSTRINGTAIL", L"ERLANGTOKEN_BAR", L"ERLANGTOKEN_DOUBLEBAR", L"ERLANGTOKEN_SEMICOLON", L"ERLANGTOKEN_COLON", 
+                                         L"ERLANGTOKEN_FORWARDSLASH", L"ERLANGTOKEN_HASH", L"ERLANGTOKEN_TYPESEPARATOR", L"ERLANGTOKEN_TYPEVALUERANGE", L"ERLANGTOKEN_UNSPECIFIEDTYPE", 
+                                         L"ERLANGTOKEN_DOT", L"ERLANGTOKEN_DOTTERMINATOR",
 
-                                         L"AFTER", L"BEGIN", L"CASE", L"TRY", L"CATCH", L"END", L"FUN", L"IF", L"OF", L"RECEIVE", 
-                                         L"WHEN", L"ANDALSO", L"ORELSE", L"QUERY", L"SPEC", L"CALLBACK" 
+                                         L"ERLANGTOKEN_AFTER", L"ERLANGTOKEN_BEGIN", L"ERLANGTOKEN_CASE", L"ERLANGTOKEN_TRY", L"ERLANGTOKEN_CATCH", L"ERLANGTOKEN_END", 
+                                         L"ERLANGTOKEN_FUN", L"ERLANGTOKEN_IF", L"ERLANGTOKEN_OF", L"ERLANGTOKEN_RECEIVE", L"ERLANGTOKEN_WHEN", L"ERLANGTOKEN_ANDALSO", 
+                                         L"ERLANGTOKEN_ORELSE", L"ERLANGTOKEN_QUERY", L"ERLANGTOKEN_SPEC", L"ERLANGTOKEN_CALLBACK", 
 
-                                         L"OPBNOT", L"OPNOT", L"OPMULT", L"OPINTDIV", L"OPREM", L"OPBAND", L"OPAND", L"OPPLUS", L"OPMINUS", 
-                                         L"OPBOR", L"OPBXOR", L"OPBSL", L"OPBSR", L"OPOR", L"OPXOR", L"OPLISTCONCAT", L"OPLISTSUBTRACT", 
-                                         L"OPEQUALTO", L"OPNOTEQUALTO", L"OPLESSTHANEQUAL", L"OPLESSTHAN", L"OPGREATERTHANEQUAL", L"OPGREATERTHAN", 
-                                         L"OPIDENTICALTO", L"OPNOTIDENTICALTO", L"OPGENERATE", L"OPBITGENERATE", L"OPSEND", L"OPMATCH", 
+                                         L"ERLANGTOKEN_OPBNOT", L"ERLANGTOKEN_OPNOT", L"ERLANGTOKEN_OPMULT", L"ERLANGTOKEN_OPINTDIV", L"ERLANGTOKEN_OPREM", 
+                                         L"ERLANGTOKEN_OPBAND", L"ERLANGTOKEN_OPAND", L"ERLANGTOKEN_OPLISTCONCAT", L"ERLANGTOKEN_OPLISTSUBTRACT", 
+                                         L"ERLANGTOKEN_OPPLUS", L"ERLANGTOKEN_OPMINUS", L"ERLANGTOKEN_OPBOR", L"ERLANGTOKEN_OPBXOR", L"ERLANGTOKEN_OPBSL", 
+                                         L"ERLANGTOKEN_OPBSR", L"ERLANGTOKEN_OPOR", L"ERLANGTOKEN_OPXOR", L"ERLANGTOKEN_OPEQUALTO", L"ERLANGTOKEN_OPNOTEQUALTO", 
+                                         L"ERLANGTOKEN_OPLESSTHANEQUAL", L"ERLANGTOKEN_OPLESSTHAN", L"ERLANGTOKEN_OPGREATERTHANEQUAL", L"ERLANGTOKEN_OPGREATERTHAN", 
+                                         L"ERLANGTOKEN_OPIDENTICALTO", L"ERLANGTOKEN_OPNOTIDENTICALTO", 
+                                         L"ERLANGTOKEN_OPGENERATE", L"ERLANGTOKEN_OPBITGENERATE", L"ERLANGTOKEN_OPSEND", L"ERLANGTOKEN_OPMATCH", 
 
-                                         L"UNIVERSALPATTERN", L"ATOM", L"COMMENT", L"VARIABLE", 
+                                         L"ERLANGTOKEN_UNIVERSALPATTERN", L"ERLANGTOKEN_ATOM", L"ERLANGTOKEN_COMMENT", L"ERLANGTOKEN_VARIABLE", 
 
-                                         L"CHARACTERLITERAL", L"DECIMALLITERAL", L"EXPLICITRADIXLITERAL", L"FLOATLITERAL", L"STRINGLITERAL",
+                                         L"ERLANGTOKEN_CHARACTERLITERAL", L"ERLANGTOKEN_DECIMALLITERAL", L"ERLANGTOKEN_EXPLICITRADIXLITERAL", L"ERLANGTOKEN_FLOATLITERAL", L"ERLANGTOKEN_STRINGLITERAL",
 
-                                         L"FILEATTRIBUTEHEAD", L"MODULEATTRIBUTEHEAD", L"EXPORTTYPEATTRIBUTEHEAD", L"EXPORTATTRIBUTEHEAD", 
-                                         L"IMPORTATTRIBUTEHEAD", L"COMPILEATTRIBUTEHEAD", L"MACRODEFINITIONHEAD", L"TYPEDEFINITIONHEAD", 
-                                         L"FUNCTIONSPECHEAD", L"RECORDATTRIBUTEHEAD", L"WILDATTRIBUTEHEAD" };
+                                         L"ERLANGTOKEN_SPECATTRIBUTEHEAD", L"ERLANGTOKEN_CALLBACKATTRIBUTEHEAD", L"ERLANGTOKEN_GENERICATTRIBUTEHEAD" };
 
-        return enumNameArr[tokenId - LEFTPAREN];
+        return enumNameArr[tokenId - ERLANGTOKEN_LEFTPAREN];
     }
 
     wstring CreatePairInitializerListFromString(const wstring& refIn)
@@ -97,14 +104,40 @@ namespace TestUtil
         wchar_t const* last = first + refToLex.size();
 
         TokenVector actualTokens;
-        TokenProcessor tokenProcessor(actualTokens);
-        bool lexingSucceeded = lex::tokenize(first, last, g_lexer, tokenProcessor);
-        
-        BOOST_CHECK( lexingSucceeded == shouldSucceed );
+        auto cur = g_lexer.begin(first, last);
+        auto end = g_lexer.end();
+
+        for(; cur != end && cur->is_valid() ; ++cur)
+        {
+            try
+            {
+                actualTokens.push_back(make_pair(cur->id(), wstring(cur->value().begin(), cur->value().end())));
+            }
+            catch(const std::bad_alloc&)
+            {
+                break;
+            }
+        }
+
+        const bool lexingSucceeded = (cur == end);
+
+        const bool lexResultAsExpected = lexingSucceeded == shouldSucceed;
+
+        //Kind of goofy to have to do it this way but the unit test stuff is not set up to output wstrings :(
+        if(!lexResultAsExpected)
+        {
+            wcout << endl << L"Lexing was expected to " << (shouldSucceed ? L"pass" : L"fail") << L"but it " << (shouldSucceed ? L"failed" : L"passed") << L" with input '" << refToLex << L"'" << endl;
+        }
+        BOOST_CHECK( lexResultAsExpected );
 
         if(shouldSucceed)
-        {
-            BOOST_CHECK( actualTokens.size() == expectedTokens.size() );
+        {            
+            const bool sizeMatches = actualTokens.size() == expectedTokens.size();
+            if(!sizeMatches)
+            {
+                wcout << endl << L"Expected lexing to result in " << expectedTokens.size() << L" but it actually resulted in " << actualTokens.size() << L" tokens." << endl;
+            }
+            BOOST_CHECK( sizeMatches );
 
             //avoid annoying signed/unsigned mismatch or relying on the fact that ::size_type is == size_t
             typedef decltype(actualTokens.size()) IndexType;
@@ -113,9 +146,14 @@ namespace TestUtil
             {
                 auto actual = actualTokens[i];
                 auto expected = expectedTokens[i];
-                const bool res = (actual == expected);
 
-                BOOST_CHECK( actual == expected );
+                const bool areEqual = (actual == expected);
+                if(!areEqual)
+                {
+                    wcout << endl << L"Expected token '" << expected.second + L"' (" << expected.first << "), but got '" << actual.second << L"' (" << actual.first << L") at token index " << i << endl;
+                }
+
+                BOOST_CHECK( areEqual );
             }
         }
     }

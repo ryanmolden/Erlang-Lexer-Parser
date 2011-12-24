@@ -1,17 +1,12 @@
-#pragma once
+#include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
 #include "TestUtil.h"
 #include <ErlangTokens.h>
-#include <string>
-#include <utility>
 
 BOOST_AUTO_TEST_SUITE( DecimalLiteralTests )
 
 using namespace TestUtil;
-using std::wstring;
-using std::pair;
-using std::make_pair;
-using std::transform;
+using namespace std;
 
 BOOST_AUTO_TEST_CASE( SingleDigitDecimalLiteralTest )
 {
@@ -20,7 +15,7 @@ BOOST_AUTO_TEST_CASE( SingleDigitDecimalLiteralTest )
 
     vector<pair<unsigned int, const wchar_t*>> pairs;
     transform(asciiDigits.begin(), asciiDigits.end(), back_inserter(pairs),
-              [](const wstring& refItem) { return make_pair(DECIMALLITERAL, refItem.c_str()); });
+              [](const wstring& refItem) { return make_pair(ERLANGTOKEN_DECIMALLITERAL, refItem.c_str()); });
 
     VerifyPairs(pairs.begin(), pairs.end());
 }
@@ -33,7 +28,7 @@ BOOST_AUTO_TEST_CASE( MultiDigitDecimalLiteralTest )
 
     wstring toLex(L"42");
     TokenVector expectedTokens;
-    expectedTokens.push_back(make_pair(DECIMALLITERAL, toLex));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_DECIMALLITERAL, toLex));
 
     VerifyLex(toLex, expectedTokens);
 }

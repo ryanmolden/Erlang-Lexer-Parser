@@ -1,38 +1,32 @@
-#pragma once
+#include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
 #include "TestUtil.h"
 #include <ErlangTokens.h>
-#include <string>
-#include <algorithm>
-#include <utility>
 
 BOOST_AUTO_TEST_SUITE( CommentTests )
 
 using namespace TestUtil;
-using std::wstring;
-using std::for_each;
-using std::pair;
-using std::make_pair;
+using namespace std;
 
 BOOST_AUTO_TEST_CASE( EmptyCommentTest )
 {
     TokenVector expectedTokens;
-    expectedTokens.push_back(make_pair(COMMENT, L"%\n"));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, L"%\n"));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 
     expectedTokens.clear();
-    expectedTokens.push_back(make_pair(COMMENT, L"%\r"));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, L"%\r"));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 
     expectedTokens.clear();
-    expectedTokens.push_back(make_pair(COMMENT, L"%\r\n"));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, L"%\r\n"));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 
     expectedTokens.clear();
-    expectedTokens.push_back(make_pair(COMMENT, L"%\n\r"));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, L"%\n\r"));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 }
@@ -40,7 +34,7 @@ BOOST_AUTO_TEST_CASE( EmptyCommentTest )
 BOOST_AUTO_TEST_CASE( SimpleCommentTest )
 {
     TokenVector expectedTokens;
-    expectedTokens.push_back(make_pair(COMMENT, L"%This is an Erlang comment!\n"));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, L"%This is an Erlang comment!\n"));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 }
@@ -48,7 +42,7 @@ BOOST_AUTO_TEST_CASE( SimpleCommentTest )
 BOOST_AUTO_TEST_CASE( SimpleDoubledUpCommentCharTest )
 {
     TokenVector expectedTokens;
-    expectedTokens.push_back(make_pair(COMMENT, L"%%This is an Erlang comment with too!\n"));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, L"%%This is an Erlang comment with too!\n"));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 }
@@ -56,7 +50,7 @@ BOOST_AUTO_TEST_CASE( SimpleDoubledUpCommentCharTest )
 BOOST_AUTO_TEST_CASE( SimpleCommentWithNoLineTerminatorTest )
 {
     TokenVector expectedTokens;
-    expectedTokens.push_back(make_pair(COMMENT, L"%This is an Erlang comment!"));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, L"%This is an Erlang comment!"));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 }
@@ -74,7 +68,7 @@ BOOST_AUTO_TEST_CASE( FullCharacterRangeTest )
     comment += L"\n";
 
     TokenVector expectedTokens;
-    expectedTokens.push_back(make_pair(COMMENT, comment));
+    expectedTokens.push_back(make_pair(ERLANGTOKEN_COMMENT, comment));
 
     VerifyLex(expectedTokens[0].second, expectedTokens);
 }

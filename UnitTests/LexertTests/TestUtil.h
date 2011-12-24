@@ -1,42 +1,19 @@
 #pragma once
-#include <ErlangLexer.h>
 #include <string>
+#include <vector>
 #include <algorithm>
 #include <utility>
 
 namespace TestUtil
 {
-    using std::vector;
-    using std::pair;
-    using std::wstring;
-    using std::make_pair;
-    using std::for_each;
+    typedef std::vector<std::pair<unsigned int, std::wstring>> TokenVector;
 
-    typedef vector<pair<unsigned int, wstring>> TokenVector;
+    void PopulateASCIICharacterCodes(std::vector<std::wstring>& toPopulate, const std::pair<int,int>& characterCodeRange, std::wstring prefix = std::wstring());
+    void VerifyLex(const std::wstring& refToLex, const TokenVector& expectedTokens, bool shouldSucceed = true);
+    void VerifyEscapedControlCodes(unsigned int expectedToken, std::wstring codeStringPrefix, std::wstring codeStringSuffix);
+    void VerifyEscapedOctalDigits(unsigned int expectedToken, std::wstring octalDigitStringPrefix, std::wstring octalDigitStringSuffix);
 
-    struct TokenProcessor
-    {
-        TokenProcessor(TokenVector& tokens) : m_tokens(tokens) 
-        {}
-
-        template <typename Token>
-        bool operator()(const Token& t)
-        {
-            m_tokens.push_back(make_pair(t.id(), wstring(t.value().begin(), t.value().end())));
-
-            return true;
-        }    
-
-    private:
-        TokenVector& m_tokens;
-    };
-
-    void PopulateASCIICharacterCodes(vector<wstring>& toPopulate, const pair<int,int>& characterCodeRange, wstring prefix = wstring());
-    void VerifyLex(const wstring& refToLex, const TokenVector& expectedTokens, bool shouldSucceed = true);
-    void VerifyEscapedControlCodes(unsigned int expectedToken, wstring codeStringPrefix, wstring codeStringSuffix);
-    void VerifyEscapedOctalDigits(unsigned int expectedToken, wstring octalDigitStringPrefix, wstring octalDigitStringSuffix);
-
-    void DumpLexedTokens(const wstring& refToLex, std::function<void(const std::pair<unsigned int, wstring>&)> callback);
+    void DumpLexedTokens(const std::wstring& refToLex, std::function<void(const std::pair<unsigned int, std::wstring>&)> callback);
     std::wstring ReadFileIntoString(const char *pFilePath);
     std::wstring EscapeQuotes(const std::wstring& refToEscape);
     std::wstring EscapeNewLines(const std::wstring& refToEscape);
@@ -46,15 +23,15 @@ namespace TestUtil
     template<typename Iter>
     void VerifyPairs(Iter start, Iter end)
     {
-        for_each(start, end,
-                 [](const pair<unsigned int, const wchar_t*>& refPair) -> void 
-                 {
-                     wstring toLex = wstring(refPair.second);
-                  
-                     TokenVector expectedTokens;
-                     expectedTokens.push_back(make_pair(refPair.first, toLex));
-                  
-                     VerifyLex(toLex, expectedTokens);
-                 });
+        std::for_each(start, end,
+                      [](const std::pair<unsigned int, const wchar_t*>& refPair) -> void 
+                      {
+                          std::wstring toLex = std::wstring(refPair.second);
+                       
+                          TokenVector expectedTokens;
+                          expectedTokens.push_back(make_pair(refPair.first, toLex));
+                       
+                          VerifyLex(toLex, expectedTokens);
+                      });
     }
 }

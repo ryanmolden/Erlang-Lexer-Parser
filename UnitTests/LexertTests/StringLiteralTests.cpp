@@ -1,17 +1,12 @@
-#pragma once
+#include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
 #include "TestUtil.h"
 #include <ErlangTokens.h>
-#include <string>
-#include <algorithm>
-#include <utility>
 
 BOOST_AUTO_TEST_SUITE( StringLiteralTests )
 
 using namespace TestUtil;
-using std::wstring;
-using std::for_each;
-using std::pair;
+using namespace std;
 
 BOOST_AUTO_TEST_CASE( StringLiteralRecognizedEscapeSequencesTest )
 {
@@ -24,7 +19,7 @@ BOOST_AUTO_TEST_CASE( StringLiteralRecognizedEscapeSequencesTest )
                  wstring toLex = wstring(L"\"") + refString + wstring(L"\"");
 
                  TokenVector expectedTokens;
-                 expectedTokens.push_back(make_pair(STRINGLITERAL, toLex));
+                 expectedTokens.push_back(make_pair(ERLANGTOKEN_STRINGLITERAL, toLex));
 
                  VerifyLex(toLex, expectedTokens);
              });
@@ -32,12 +27,12 @@ BOOST_AUTO_TEST_CASE( StringLiteralRecognizedEscapeSequencesTest )
 
 BOOST_AUTO_TEST_CASE( ControlEscapeStringLiteralsTest )
 {
-    VerifyEscapedControlCodes(STRINGLITERAL, wstring(L"\""), wstring(L"\""));
+    VerifyEscapedControlCodes(ERLANGTOKEN_STRINGLITERAL, wstring(L"\""), wstring(L"\""));
 }
 
 BOOST_AUTO_TEST_CASE( OctalEscapeStringLiteralsTest )
 {
-    VerifyEscapedOctalDigits(STRINGLITERAL, wstring(L"\""), wstring(L"\""));
+    VerifyEscapedOctalDigits(ERLANGTOKEN_STRINGLITERAL, wstring(L"\""), wstring(L"\""));
 }
 
 BOOST_AUTO_TEST_CASE( InvalidStringLiteralsTest )

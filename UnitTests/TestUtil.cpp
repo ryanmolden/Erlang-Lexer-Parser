@@ -5,16 +5,23 @@
 #include <fstream>
 #include <regex>
 #include <ErlangLexer.h>
-#include <sstream>
-#include <boost/test/unit_test_log.hpp>
+#include <ErlangParser.h>
 
 namespace
 {
     typedef lex::lexertl::token<const wchar_t*> TokenType;
     typedef lex::lexertl::actor_lexer<TokenType> BaseLexerType;
+    typedef ErlangLexer<BaseLexerType> LexerType;
+    typedef LexerType::iterator_type LexerIteratorType;
+    typedef ErlangParser<LexerIteratorType, LexerType> ParserType;
 
-    //TODO:  Pass this into test cases instead of having this global, but this speeds up runtime MASSIVELY over constantly reconstructing it.
-    ErlangLexer<BaseLexerType> g_lexer;
+    //TODO:  Pass these into test cases instead of having these globals, but this speeds up runtime MASSIVELY over constantly 
+    //reconstructing them.
+    LexerType g_lexer;
+
+    ParserType g_parser(g_lexer);
+
+    ParserType::CommentSkipperType g_skipper(g_lexer.comment);
 }
 
 namespace TestUtil
@@ -155,6 +162,47 @@ namespace TestUtil
 
                 BOOST_CHECK( areEqual );
             }
+        }
+    }
+
+    void VerifyParse(const std::wstring& refToParse, const std::vector<wstring>& expectedResults)
+    {
+        const wchar_t *pStart = refToParse.c_str();
+        const wchar_t *pEnd = pStart + refToParse.size();
+
+        vector<wstring> actualResults;
+        bool parseSucceeded = lex::tokenize_and_phrase_parse(pStart, pEnd, g_lexer, g_parser, g_skipper, actualResults);
+        if(!parseSucceeded)
+        {
+            wcout << L"Parsing failed with '" << refToParse << L"'." << endl;
+        }
+        BOOST_CHECK( parseSucceeded );
+
+        const bool resultCountMatchesExpectedCount = (expectedResults.size() == actualResults.size());
+        if(!resultCountMatchesExpectedCount)
+        {
+            wcout << L"Different number of results than expected." << endl << endl << L"Expected:" << endl;
+            copy(expectedResults.begin(), expectedResults.end(), ostream_iterator<wstring, wchar_t>(wcout, L"\n"));
+
+            wcout << endl << endl << L"Actual:" << endl;
+            copy(actualResults.begin(), actualResults.end(), ostream_iterator<wstring, wchar_t>(wcout, L"\n"));
+        }
+        BOOST_CHECK( resultCountMatchesExpectedCount );
+
+        //avoid annoying signed/unsigned mismatch or relying on the fact that ::size_type is == size_t
+        typedef decltype(actualResults.size()) IndexType;
+
+        for(IndexType i = 0 ; i < actualResults.size() ; ++i)
+        {
+            const wstring& actual = actualResults[i];
+            const wstring& expected = expectedResults[i];
+
+            const bool areEqual = (actual == expected);
+            if(!areEqual)
+            {
+                wcout << L"Expected '" << expected << L"', but got '" << actual << L"'." << endl;
+            }
+            BOOST_CHECK( areEqual );
         }
     }
 

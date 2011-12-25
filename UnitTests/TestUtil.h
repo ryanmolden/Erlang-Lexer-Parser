@@ -12,7 +12,7 @@ namespace TestUtil
     void VerifyLex(const std::wstring& refToLex, const TokenVector& expectedTokens, bool shouldSucceed = true);
     void VerifyEscapedControlCodes(unsigned int expectedToken, std::wstring codeStringPrefix, std::wstring codeStringSuffix);
     void VerifyEscapedOctalDigits(unsigned int expectedToken, std::wstring octalDigitStringPrefix, std::wstring octalDigitStringSuffix);
-
+    void VerifyParse(const std::wstring& refToParse, const std::vector<std::wstring>& expectedResults);
     void DumpLexedTokens(const std::wstring& refToLex, std::function<void(const std::pair<unsigned int, std::wstring>&)> callback);
     std::wstring ReadFileIntoString(const char *pFilePath);
     std::wstring EscapeQuotes(const std::wstring& refToEscape);

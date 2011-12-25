@@ -1,7 +1,5 @@
 #include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
-#include "TestUtil.h"
-#include <ErlangTokens.h>
 
 BOOST_AUTO_TEST_SUITE( RealErlangFileTests )
 

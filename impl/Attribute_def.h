@@ -164,4 +164,73 @@ ErlangAttribute<Iterator, Lexer, SkipperType>::ErlangAttribute(const Lexer& lexe
     m_attribute = qi::hold[m_lexer.specAttributeHead >> m_typeSpec]          |
                   qi::hold[m_lexer.genericAttributeHead >> m_attributeValue] |
                   m_lexer.genericAttributeHead >> -m_lexer.leftParen >> m_typedAttributeValue >> -m_lexer.rightParen;
+
+    #pragma region Debug Support
+
+    BOOST_SPIRIT_DEBUG_NODES(
+        (m_hashAtom)
+         (m_specFun)
+         (m_typeGuard)
+         (m_typeGuards)
+         (m_typeSig)
+         (m_typeSigs)
+         (m_typeSpec)
+         (m_expressions)
+         (m_attributeValue)
+         (m_topTypes)
+         (m_topType)
+         (m_type100)
+         (m_type200)
+         (m_nlrType300)
+         (m_type300)
+         (m_nlrType400)
+         (m_type400)
+         (m_type500)
+         (m_type)
+         (m_binaryType)
+         (m_binaryBaseType)
+         (m_binaryUnitType)
+         (m_funType100)
+         (m_funType)
+         (m_fieldTypes)
+         (m_fieldType)
+         (m_typedExpressions)
+         (m_typedExpression)
+         (m_typedRecordFields)
+         (m_typedAttributeValue)
+         (m_attribute));
+
+    //debug(m_hashAtom);    
+    //debug(m_specFun);
+    //debug(m_typeGuard);
+    //debug(m_typeGuards);
+    //debug(m_typeSig);
+    //debug(m_typeSigs);
+    //debug(m_typeSpec);    
+    //debug(m_expressions);
+    //debug(m_attributeValue);
+    //debug(m_topTypes);
+    //debug(m_topType);
+    //debug(m_type100);
+    //debug(m_type200);
+    //debug(m_nlrType300);
+    //debug(m_type300);
+    //debug(m_nlrType400);
+    //debug(m_type400);
+    //debug(m_type500);
+    //debug(m_type);
+    //debug(m_binaryType);
+    //debug(m_binaryBaseType);
+    //debug(m_binaryUnitType);
+    //debug(m_funType100);
+    //debug(m_funType);
+    //debug(m_fieldTypes);
+    //debug(m_fieldType);
+    //debug(m_typedExpressions);
+    //debug(m_typedExpression);
+    //debug(m_typedRecordFields);
+    //debug(m_typedAttributeValue);
+    //debug(m_attribute);
+
+    #pragma endregion
 }

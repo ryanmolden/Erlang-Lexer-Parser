@@ -10,25 +10,25 @@
 #include "Function.h"
 #include "CommentSkipper.h"
 
-//namespace boost { namespace spirit { namespace traits
-//{
-//    typedef boost::spirit::lex::lexertl::token<wchar_t const *,boost::mpl::vector0<boost::mpl::na>,boost::mpl::bool_<1>,unsigned int> MyTokenType;
-//
-//    template <typename Out>
-//    __declspec(noinline) void print_token(Out& out, MyTokenType const& val)
-//    {
-//        std::wcout << std::wstring(val.value().begin(), val.value().end());
-//    }
-//
-//    template <typename Out>
-//    __declspec(noinline) void print_attribute(Out& out, boost::fusion::cons<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> > &,boost::fusion::nil> const& val)
-//    {
-//        std::wcout << std::wstring(val.car);
-//    }
-//
-//    //+		context.attributes	{car="-module" cdr={...} }	
-//
-//}}}
+//Add helpers to the traits namespace that will dump our tokens to wcout properly for the debug stuff. Can't change the DEBUG_OUT stream in 
+//spirit to be wcout as the simple trace stuff doesn't output wide strings.
+namespace boost { namespace spirit { namespace traits
+{
+    typedef boost::spirit::lex::lexertl::token<wchar_t const *,boost::mpl::vector0<boost::mpl::na>,boost::mpl::bool_<1>,unsigned int> MyTokenType;
+
+    template <typename Out>
+    inline void print_token(Out& out, MyTokenType const& val)
+    {
+        std::wcout << std::wstring(val.value().begin(), val.value().end());
+    }
+
+    typedef boost::fusion::cons<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> > &,boost::fusion::nil> MyAttributeType;
+    template <typename Out>
+    inline void print_attribute(Out& out, const MyAttributeType& val)
+    {
+        std::wcout << std::wstring(val.car);
+    }
+}}}
 
 namespace qi = boost::spirit::qi;
 

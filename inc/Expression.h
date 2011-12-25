@@ -12,9 +12,9 @@ struct ErlangExpression : qi::grammar<Iterator, std::wstring(), SkipperType>
     ErlangExpression(const Lexer& lexer, 
                      const ErlangTerminals<Iterator, Lexer, SkipperType> & terminals);
 
-    //TODO:  Should these be exposed from here?  They are used in some rules that still live in ErlangParser...maybe there is a third rule class
-    //shared between this class and the rules that need the stuff below...need to see how 'entangled' these rules are with private rules in
-    //this class.
+    //TODO:  Should these be exposed from here?  They are used in some rules that are used by other rule classes (like ErlangFunction)...maybe there 
+    //is a third rule class shared between this class and the rules that need the stuff below...need to see how 'entangled' these rules are with 
+    //private rules in this class.
     qi::rule<Iterator, std::wstring(), SkipperType> ArgumentList;
     qi::rule<Iterator, std::wstring(), SkipperType> ClauseGuard;
     qi::rule<Iterator, std::wstring(), SkipperType> ClauseBody;

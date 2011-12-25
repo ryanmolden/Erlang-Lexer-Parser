@@ -91,5 +91,6 @@ ErlangTerminals<Iterator, Lexer, SkipperType>::ErlangTerminals(Lexer const& lexe
     //debug(AtomOrVariable);
     //debug(Integer);
     //debug(IntegerOrVariable);
+
     #pragma endregion
 }

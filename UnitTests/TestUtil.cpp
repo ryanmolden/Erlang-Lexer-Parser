@@ -1,11 +1,7 @@
 #include "stdafx.h"
-#include "ErlangLexer.h"
-#include <boost/test/unit_test.hpp>
-#include "TestUtil.h"
 #include <fstream>
 #include <regex>
-#include <ErlangLexer.h>
-#include <ErlangParser.h>
+#include <boost/test/unit_test.hpp>
 
 namespace
 {

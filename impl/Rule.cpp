@@ -1,8 +1,5 @@
 #include "StdAfx.h"
-#include <boost/spirit/include/lex_lexertl.hpp>
 #include "Rule_def.h"
-#include "ErlangLexer.h"
-#include "CommentSkipper.h"
 
 namespace lex = boost::spirit::lex;
 

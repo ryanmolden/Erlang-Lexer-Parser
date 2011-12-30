@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include <boost/test/unit_test.hpp>
+#include <stdio.h>
 
 BOOST_AUTO_TEST_SUITE( ExplicitRadixLiteralTests )
 
@@ -15,7 +16,12 @@ namespace
         wchar_t lowerCaseCharDigits[] = {L'a', L'b', L'c', L'd', L'e', L'f'};
 
         wchar_t buffer[5] = {0};
+
+        #if defined(_MSC_VER)
         _itow_s(radix, buffer, 10);
+        #else
+        swprintf(buffer, _countof(buffer), L"%d", radix);
+        #endif
 
         const int radixLength = static_cast<int>(std::log10(static_cast<double>(radix)) + 1);
         buffer[radixLength] = L'#';

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ATTRIBUTEDEF_21DD23C1
+#define ATTRIBUTEDEF_21DD23C1
+
 #include "Attribute.h"
 
 template <typename Iterator, typename Lexer, typename SkipperType>
@@ -163,7 +165,7 @@ ErlangAttribute<Iterator, Lexer, SkipperType>::ErlangAttribute(const Lexer& lexe
     //attribute -> '-' 'spec' type_spec
     m_attribute = qi::hold[m_lexer.specAttributeHead >> m_typeSpec]          |
                   qi::hold[m_lexer.genericAttributeHead >> m_attributeValue] |
-                  m_lexer.genericAttributeHead >> -m_lexer.leftParen >> m_typedAttributeValue >> -m_lexer.rightParen;
+                  m_lexer.genericAttributeHead >> qi::omit[-m_lexer.leftParen] >> m_typedAttributeValue >> qi::omit[-m_lexer.rightParen];
 
     #pragma region Debug Support
 
@@ -234,3 +236,5 @@ ErlangAttribute<Iterator, Lexer, SkipperType>::ErlangAttribute(const Lexer& lexe
 
     #pragma endregion
 }
+
+#endif

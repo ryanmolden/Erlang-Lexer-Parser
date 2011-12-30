@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TESTUTIL_21DD23C1
+#define TESTUTIL_21DD23C1
+
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -35,3 +37,5 @@ namespace TestUtil
                       });
     }
 }
+
+#endif

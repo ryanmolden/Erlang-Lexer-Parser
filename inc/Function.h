@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FUNCTION_21DD23C1
+#define FUNCTION_21DD23C1
 
 #include <boost/spirit/include/qi.hpp>
 #include <string>
@@ -22,3 +23,5 @@ private:
     qi::rule<Iterator, std::wstring(), SkipperType> m_functionClause;
     qi::rule<Iterator, std::wstring(), SkipperType> m_functionClauses;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMENTSKIPPER_21DD23C1
+#define COMMENTSKIPPER_21DD23C1
 
 #include <boost/spirit/include/qi.hpp>
 
@@ -13,3 +14,5 @@ struct CommentSkipper : qi::grammar<Iterator>
 private:
     qi::rule<Iterator> m_root;
 };
+
+#endif

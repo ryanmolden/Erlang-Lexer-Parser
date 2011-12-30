@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ERLANGPARSER_21DD23C1
+#define ERLANGPARSER_21DD23C1
 
 #include <boost/spirit/include/qi.hpp>
 #include "ErlangLexer.h"
@@ -78,3 +79,5 @@ private:
     qi::rule<Iterator, std::wstring(), CommentSkipperType> m_form;
     qi::rule<Iterator, std::vector<std::wstring>(), CommentSkipperType> m_root;
 };
+
+#endif

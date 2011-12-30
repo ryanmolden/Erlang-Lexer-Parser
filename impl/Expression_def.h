@@ -1,4 +1,6 @@
-#pragma once
+#ifndef EXPRESSIONDEF_21DD23C1
+#define EXPRESSIONDEF_21DD23C1
+
 #include "Expression.h"
 
 template <typename Iterator, typename Lexer, typename SkipperType>
@@ -421,3 +423,5 @@ ErlangExpression<Iterator, Lexer, SkipperType>::ErlangExpression(const Lexer& le
 
     #pragma endregion
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ERLANGTOKENS_21DD23C1
+#define ERLANGTOKENS_21DD23C1
 
 //Identifiers for the tokens our lexer will produce.
 enum ErlangTokens
@@ -39,8 +40,8 @@ enum ErlangTokens
     ERLANGTOKEN_OF,
     ERLANGTOKEN_RECEIVE,
     ERLANGTOKEN_WHEN,
-    ERLANGTOKEN_ANDALSO,
-    ERLANGTOKEN_ORELSE,
+    ERLANGTOKEN_ANDALSO,  //TODO: These are operators, should be in the OPXX section
+    ERLANGTOKEN_ORELSE,   //TODO: These are operators, should be in the OPXX section
     ERLANGTOKEN_QUERY,
     ERLANGTOKEN_SPEC,
     ERLANGTOKEN_CALLBACK,
@@ -54,7 +55,7 @@ enum ErlangTokens
     ERLANGTOKEN_OPBAND,
     ERLANGTOKEN_OPAND,
     ERLANGTOKEN_OPLISTCONCAT,
-    ERLANGTOKEN_OPLISTSUBTRACT,
+    ERLANGTOKEN_OPLISTSUBTRACT,  //Rename this to OPLISTDIFF?
     ERLANGTOKEN_OPPLUS,
     ERLANGTOKEN_OPMINUS,
     ERLANGTOKEN_OPBOR,
@@ -94,3 +95,5 @@ enum ErlangTokens
     ERLANGTOKEN_CALLBACKATTRIBUTEHEAD,
     ERLANGTOKEN_GENERICATTRIBUTEHEAD
 };
+
+#endif

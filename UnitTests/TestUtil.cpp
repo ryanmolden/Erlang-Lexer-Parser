@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <fstream>
 #include <regex>
 #include <boost/test/unit_test.hpp>
@@ -161,7 +161,7 @@ namespace TestUtil
         }
     }
 
-    void VerifyParse(const std::wstring& refToParse, const std::vector<wstring>& expectedResults)
+    void VerifyParse(const std::wstring& refToParse, const vector<wstring>& expectedResults)
     {
         const wchar_t *pStart = refToParse.c_str();
         const wchar_t *pEnd = pStart + refToParse.size();
@@ -190,8 +190,8 @@ namespace TestUtil
 
         for(IndexType i = 0 ; i < actualResults.size() ; ++i)
         {
-            const wstring& actual = actualResults[i];
-            const wstring& expected = expectedResults[i];
+            auto actual = actualResults[i];
+            auto expected = expectedResults[i];
 
             const bool areEqual = (actual == expected);
             if(!areEqual)

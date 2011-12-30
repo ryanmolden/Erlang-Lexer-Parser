@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TERMINALS_21DD23C1
+#define TERMINALS_21DD23C1
 
 #include <boost/spirit/include/qi.hpp>
 #include <string>
@@ -22,3 +23,5 @@ struct ErlangTerminals
 private:
     const Lexer& m_lexer;
 };
+
+#endif

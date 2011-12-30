@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ATTRIBUTE_21DD23C1
+#define ATTRIBUTE_21DD23C1
 
 #include <boost/spirit/include/qi.hpp>
 #include <string>
@@ -56,3 +57,5 @@ private:
 
     qi::rule<Iterator, std::wstring(), SkipperType> m_attribute;
 };
+
+#endif

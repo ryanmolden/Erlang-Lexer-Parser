@@ -1,4 +1,6 @@
-#pragma once
+#ifndef FUNCTIONDEF_21DD23C1
+#define FUNCTIONDEF_21DD23C1
+
 #include "Function.h"
 
 template <typename Iterator, typename Lexer, typename SkipperType>
@@ -27,3 +29,5 @@ ErlangFunction<Iterator, Lexer, SkipperType>::ErlangFunction(const Lexer& lexer,
 
     #pragma endregion
 }
+
+#endif

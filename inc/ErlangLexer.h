@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ERLANGLEXER_21DD23C1
+#define ERLANGLEXER_21DD23C1
+
 #include <boost/spirit/include/lex_lexertl.hpp>
 #include "ErlangTokens.h"
 #include <string>
@@ -680,3 +682,5 @@ struct ErlangLexer : lex::lexer<Lexer>
     Token callbackAttributeHead;
     Token genericAttributeHead;
 };
+
+#endif

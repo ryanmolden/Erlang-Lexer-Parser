@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EXPRESSION_21DD23C1
+#define EXPRESSION_21DD23C1
 
 #include <boost/spirit/include/qi.hpp>
 #include <string>
@@ -96,3 +97,5 @@ private:
     qi::rule<Iterator, std::wstring(), SkipperType> m_expression;
     qi::rule<Iterator, std::wstring(), SkipperType> m_expressions;
 };
+
+#endif

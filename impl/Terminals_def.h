@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TERMINALSDEF_21DD23C1
+#define TERMINALSDEF_21DD23C1
+
 #include "Terminals.h"
 
 template <typename Iterator, typename Lexer, typename SkipperType>
@@ -94,3 +96,5 @@ ErlangTerminals<Iterator, Lexer, SkipperType>::ErlangTerminals(Lexer const& lexe
 
     #pragma endregion
 }
+
+#endif

@@ -8,7 +8,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE( PermutationsFileTest )
 {
-    wstring permutations = ReadFileIntoString("ErlangFiles\\permutations.erl");
+    wstring permutations = ReadFileIntoString("ErlangFiles/permutations.erl");
 
     pair<unsigned int, wstring> expectedTokensArr[] = { /*-module(permutations).*/
                                                        make_pair(ERLANGTOKEN_GENERICATTRIBUTEHEAD, L"-module"), make_pair(ERLANGTOKEN_LEFTPAREN, L"("), make_pair(ERLANGTOKEN_ATOM, L"permutations"), make_pair(ERLANGTOKEN_RIGHTPAREN, L")"), make_pair(ERLANGTOKEN_DOTTERMINATOR, L"."), 
@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE( PermutationsFileTest )
 
 BOOST_AUTO_TEST_CASE( QSortFileTest )
 {
-    wstring qsort = ReadFileIntoString("ErlangFiles\\qsort.erl");
+    wstring qsort = ReadFileIntoString("ErlangFiles/qsort.erl");
 
     pair<unsigned int, wstring> expectedTokensArr[] = { /*-module(qsort).*/
                                                        make_pair(ERLANGTOKEN_GENERICATTRIBUTEHEAD, L"-module"), make_pair(ERLANGTOKEN_LEFTPAREN, L"("), make_pair(ERLANGTOKEN_ATOM, L"qsort"), make_pair(ERLANGTOKEN_RIGHTPAREN, L")"), make_pair(ERLANGTOKEN_DOTTERMINATOR, L"."), 
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE( QSortFileTest )
 
 BOOST_AUTO_TEST_CASE( RingFileTest )
 {
-    wstring ring = ReadFileIntoString("ErlangFiles\\ring.erl");
+    wstring ring = ReadFileIntoString("ErlangFiles/ring.erl");
 
     pair<unsigned int, wstring> expectedTokensArr[] = { /*-module(ring).*/
                                                        make_pair(ERLANGTOKEN_GENERICATTRIBUTEHEAD, L"-module"), make_pair(ERLANGTOKEN_LEFTPAREN, L"("), make_pair(ERLANGTOKEN_ATOM, L"ring"), make_pair(ERLANGTOKEN_RIGHTPAREN, L")"), make_pair(ERLANGTOKEN_DOTTERMINATOR, L"."), 
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE( RingFileTest )
 
 BOOST_AUTO_TEST_CASE( VFSFileTest )
 {
-    wstring vfs = ReadFileIntoString("ErlangFiles\\vfs.erl");
+    wstring vfs = ReadFileIntoString("ErlangFiles/vfs.erl");
 
     pair<unsigned int, wstring> expectedTokensArr[] = { /*%% ---*/
                                                        make_pair(ERLANGTOKEN_COMMENT, L"%% ---\n"),

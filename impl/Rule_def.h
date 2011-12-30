@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RULEDEF_21DD23C1
+#define RULEDEF_21DD23C1
+
 #include "Rule.h"
 
 template <typename Iterator, typename Lexer, typename SkipperType>
@@ -32,3 +34,5 @@ ErlangRule<Iterator, Lexer, SkipperType>::ErlangRule(const Lexer& lexer,
 
     #pragma endregion
 }
+
+#endif

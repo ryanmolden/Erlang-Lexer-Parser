@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <iterator>
 #include <iostream>
-#include <ErlangTokens.h>
+#include "ErlangTokens.h"
 #include "ErlangLexer.h"
 #include "ErlangParser.h"
 #include "TestUtil.h"
